@@ -10,26 +10,22 @@ class personaje : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    explicit personaje(QGraphicsView *view ,const QPixmap pixmapPlayer, const QRectF sceneBounds, QObject *parent = nullptr);
+    explicit personaje(QGraphicsView *view,
+                       const QPixmap &pixmapPlayer,
+                       const QRectF &sceneBounds,
+                       QObject *parent = nullptr);
 
-signals:
+    // Métodos virtuales puros — cada personaje los implementa a su manera
+    virtual void iniciarMovimiento() = 0;
+    virtual void detener() = 0;
 
-private:
-    QPixmap pixmapPlayer;
-    QPixmap pixmapMalla;
-    QPixmap pixmapBalon;
+    // Getters/setters comunes
+    inline QRectF getSceneBounds() const { return sceneBounds; }
+    inline QGraphicsView* getView() const { return view; }
+
+protected:
     QRectF sceneBounds;
     QGraphicsView *view;
-    float vxbalon;
-    float vybalon;
-    float gravedad;
-    QTimer *timerBalon;
-public slots:
-    void moveBalon();
-    void iniciarMovimiento();
-    void rebotarConApolo();
-    void reinicarVelocidad();
-
 };
 
 #endif // PERSONAJE_H
