@@ -55,6 +55,9 @@ void balon::rebotarConMalla(float direccion)
 
 void balon::mover()
 {
+    if(vx > 8.0f)  vx = 8.0f;
+    if(vx < -8.0f) vx = -8.0f;
+    if(vy < -10.0f) vy = -10.0f;
     // Aplicar gravedad
     vy += gravedad;
 

@@ -14,9 +14,8 @@ public:
                    QObject *parent = nullptr);
 
     // Titán golpea más duro que Apolo
-    float getFuerzaX() const override { return 10.0f; }
-    float getFuerzaY() const override { return 12.0f; }
-
+    float getFuerzaX() const override { return 5.0f; }
+    float getFuerzaY() const override { return 6.0f; }
 protected:
     void actualizar() override;  // aquí vive la lógica autónoma
 

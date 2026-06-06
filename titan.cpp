@@ -7,10 +7,10 @@ titan::titan(QGraphicsView *view,
     : personajeMovil(view,
                      QPixmap(":/TitanEstatico.png"),
                      sceneBounds,
-                     700.0f,   // limIzq — campo derecho
-                     950.0f,   // limDer
-                     340.0f,   // limArriba
-                     420.0f,   // limAbajo
+                     700.0f,
+                     950.0f,
+                     340.0f,
+                     420.0f,
                      parent),
     balonRef(balonRef)
 {
