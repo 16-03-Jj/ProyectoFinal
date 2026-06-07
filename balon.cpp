@@ -8,7 +8,8 @@ balon::balon(QGraphicsView *view,
 {
     vx = -5.0f;
     vy =  2.0f;
-    gravedad = 0.3f;
+    gravedad    = 0.3f;
+    modoCenital = false;
     timer = nullptr;
     setPos(730, 350);
 }
@@ -31,65 +32,66 @@ void balon::detener()
 
 void balon::reiniciarPosicion()
 {
-    // Siempre sale hacia el lado de Apolo para que el juego sea difícil
     setPos(730, 300);
-    vx = -4.0f;
-    vy =  1.5f;
+    vx = -5.0f;
+    vy =  2.0f;
     gravedad = 0.3f;
 }
 
-// dirX: -1 viene de izquierda, +1 viene de derecha
-// fuerzaX y fuerzaY las define quien golpea (Apolo o Titán)
+void balon::reiniciarPosicionCenital()
+{
+    setPos(550, 340);
+    vx =  1.5f;   // antes 3.0f
+    vy =  2.0f;   // antes 4.0f
+    gravedad = 0.0f;
+}
+
 void balon::rebotarConJugador(float dirX, float fuerzaX, float fuerzaY)
 {
     vx = dirX * fuerzaX;
-    vy = -fuerzaY;   // siempre sube al golpear
+    vy = -fuerzaY;
+
 }
 
 void balon::rebotarConMalla(float direccion)
 {
-    // Invierte X con la dirección indicada, conserva algo de Y
     vx = direccion * qAbs(vx);
-    vy = -qAbs(vy) * 0.5f;  // sube un poco al rebotar en la malla
+    vy = -qAbs(vy) * 0.5f;
+}
+
+// Al tocar barra de Cronos: invierte Y y aumenta velocidad hacia campo de Apolo
+void balon::rebotarConBarra()
+{
+    vy =  qAbs(vy) * 1.2f;   // sale disparado hacia abajo (campo Apolo)
+    vx = vx * 0.8f;           // pierde un poco de X para ser más predecible
+    if(vy > 6.0f) vy = 6.0f;
 }
 
 void balon::mover()
 {
-    if(vx > 8.0f)  vx = 8.0f;
-    if(vx < -8.0f) vx = -8.0f;
-    if(vy < -10.0f) vy = -10.0f;
-    // Aplicar gravedad
-    vy += gravedad;
+    if(vx >  12.0f) vx =  12.0f;
+    if(vx < -12.0f) vx = -12.0f;
+    if(vy < -12.0f) vy = -12.0f;
+    if(vy >  12.0f) vy =  12.0f;
+
+    if(!modoCenital) vy += gravedad;
 
     float newX = x() + vx;
     float newY = y() + vy;
 
-    // Pared izquierda
-    if(newX <= 0){
-        newX = 0;
-        vx = qAbs(vx);  // rebota hacia la derecha
-    }
-
-    // Pared derecha
-    if(newX >= sceneBounds.width() - boundingRect().width() * scale()){
-        newX = sceneBounds.width() - boundingRect().width() * scale();
-        vx = -qAbs(vx); // rebota hacia la izquierda
-    }
-
-    // Techo
-    if(newY <= 0){
-        newY = 0;
-        vy = qAbs(vy);  // rebota hacia abajo
-    }
-
-    // Piso — no detiene el balón, eso lo maneja Widget como punto
-    if(newY >= sceneBounds.height() - 50){
-        newY = sceneBounds.height() - 50;
-        vy = 0;
-        vx = 0;
+    if(modoCenital){
+        if(newX <= 170){ newX = 170; vx =  qAbs(vx); }
+        if(newX >= 600){ newX = 600; vx = -qAbs(vx); }
+        if(newY <= 160){ newY = 160; vy =  qAbs(vy); }
+        if(newY >= 530){ newY = 530; vy = -qAbs(vy); }
+    } else {
+        float W = sceneBounds.width();
+        if(newX <= 0)   { newX = 0;   vx =  qAbs(vx); }
+        if(newX >= W)   { newX = W;   vx = -qAbs(vx); }
+        if(newY <= 0)   { newY = 0;   vy =  qAbs(vy); }
+        if(newY >= 420) { newY = 420; vx = 0; vy = 0; }
     }
 
     setPos(newX, newY);
 }
-
 

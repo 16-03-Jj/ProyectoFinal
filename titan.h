@@ -13,30 +13,27 @@ public:
                    balon *balonRef,
                    QObject *parent = nullptr);
 
-    // Titán golpea más duro que Apolo
     float getFuerzaX() const override { return 5.0f; }
     float getFuerzaY() const override { return 6.0f; }
+
 protected:
-    void actualizar() override;  // aquí vive la lógica autónoma
+    void actualizar() override;
+    virtual void decidirAccion();
+    virtual void perseguirBalon();
+    void retrocederAlCentro();
 
-private:
-    balon *balonRef;             // referencia al balón para seguirlo
+    balon *balonRef;
     QVector<QPixmap> sprites;
+    float centroX;
 
-    // Estados del agente
     enum EstadoTitan {
-        IDLE,        // esperando
-        PERSEGUIR,   // moverse hacia el balón
-        SALTAR,      // saltar para golpear
-        RETROCEDER   // volver al centro de su campo
+        IDLE,
+        PERSEGUIR,
+        SALTAR,
+        RETROCEDER
     };
 
     EstadoTitan estado;
-    float centroX;   // posición de reposo del Titán
-
-    void decidirAccion();        // máquina de estados
-    void perseguirBalon();
-    void retrocederAlCentro();
 };
 
 #endif // TITAN_H

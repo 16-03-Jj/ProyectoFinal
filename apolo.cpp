@@ -6,17 +6,15 @@ apolo::apolo(QGraphicsView *view,
     : personajeMovil(view,
                      QPixmap(":/ApoloEstatico.png"),
                      sceneBounds,
-                     370.0f,   // limIzq
+                     370.0f,   // limIzq  — campo lateral nivel 1
                      630.0f,   // limDer
-                     385.0f,   // limArriba  (techo del salto)
-                     420.0f,   // limAbajo   (piso)
+                     385.0f,   // limArriba
+                     420.0f,   // limAbajo
                      parent)
 {
-    // Apolo salta alto pero no golpea tan fuerte como el Titán
-    fuerzaSalto         = 14.0f;
-    velocidadHorizontal =  6.0f;
+    fuerzaSalto          = 14.0f;
+    velocidadHorizontal  =  6.0f;
 
-    // Cargar sprites
     sprites.append(QPixmap(":/ApoloEstatico.png"));
     sprites.append(QPixmap(":/ApoloCamina.png"));
     sprites.append(QPixmap(":/ApoloCorre.png"));
@@ -30,21 +28,19 @@ apolo::apolo(QGraphicsView *view,
 
 void apolo::actualizar()
 {
-    // Primero ejecuta movimiento base (horizontal + salto/gravedad)
     personajeMovil::actualizar();
 
-    // Animación de sprites según estado
     contadorFrames++;
-    if(contadorFrames >= 5){   // cambia frame cada 5 ticks (~100ms)
+    if(contadorFrames >= 5){
         contadorFrames = 0;
 
         if(enElAire){
-            setPixmap(sprites[3]);  // ApoloSalta
+            setPixmap(sprites[3]);
         } else if(banIzq || banDer){
             frameActual = (frameActual == 1) ? 2 : 1;
-            setPixmap(sprites[frameActual]);  // ApoloCamina / ApoloCorre
+            setPixmap(sprites[frameActual]);
         } else {
-            setPixmap(sprites[0]);  // ApoloEstatico
+            setPixmap(sprites[0]);
         }
     }
 }

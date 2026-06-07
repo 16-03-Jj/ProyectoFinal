@@ -14,8 +14,6 @@ public:
                        const QPixmap &pixmapPlayer,
                        const QRectF &sceneBounds,
                        QObject *parent = nullptr);
-
-    // Métodos virtuales puros — cada personaje los implementa a su manera
     virtual void iniciarMovimiento() = 0;
     virtual void detener() = 0;
 
